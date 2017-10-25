@@ -1,0 +1,16 @@
+version: '2'
+services:
+  pubsub:
+    image: kinok/google-pubsub-emulator
+    environment:
+      - PUBSUB_EMULATOR_HOST=localhost:8042
+      - PUBSUB_PROJECT_ID=my-project-id
+  beam:
+    image: maven:3.5-jdk-8
+    command: mvn compile
+    volumes:
+      - .:/usr/src/beam
+      - $HOME/.m2:/root/.m2
+    working_dir: /usr/src/beam
+    links:
+      - pubsub
